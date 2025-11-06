@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Krish Rana | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary-bg: #181c2c;
+      --mid-bg: #231f36;
+      --gradient: linear-gradient(120deg, #1e244d 0%, #23214a 93%);
+      --accent: #43c6ac;
+      --deep-accent: #00bcd4;
+      --violet: #7f53ff;
+      --card-bg: #23294a;
+      --border: #39354b;
+      --highlight: #e6d3f7;
+      --text: #f3f3f3;
+      --subtext: #bdbde6;
+      --contact-icon: #7f53ff;
+      --learn-bg: #1a2238;
+    }
+    html, body {
+      min-height: 100vh;
+      background: var(--primary-bg);
+      background-image: var(--gradient);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      margin: 0; padding: 0;
+      scroll-behavior: smooth;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    nav {
+      background: var(--learn-bg); color:var(--text);
+      display: flex; justify-content: center; align-items: center; gap: 1.35em;
+      box-shadow: 0 2px 9px #23214a55; padding: 1rem .2em .7em .5em;
+      font-size:1rem; position: sticky; top: 0; z-index: 20;
+    }
+    nav a {
+      color: var(--accent); font-weight: 600; border-radius: 9px;
+      border-bottom: 2.5px solid transparent; padding: .41em 1em;
+      transition: color .19s,background .20s,border .18s;
+    }
+    nav a.active, nav a:hover { background: var(--violet); color: #fff;
+      border-bottom: 2.5px solid var(--accent);}
+    .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1rem 1rem 1rem;}
+    .header-flex {
+      display: flex; align-items: center; gap: 2.1em;
+      justify-content: center; max-width:650px;margin:2rem auto 0 auto;
+    }
+    .profile-pic {
+      width: 115px; height: 115px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--accent); background: #24294b;
+      box-shadow: 0 4px 20px #16e3c82e; flex-shrink: 0;
+      transition: box-shadow .2s;
+    }
+    .profile-pic:hover { box-shadow:0 0 32px 2px var(--violet);}
+    .intro-card {
+      background: linear-gradient(100deg, #161933 65%, #23214a 100%);
+      color: var(--text); border-radius: 18px; max-width: 650px;
+      margin: 1.2em auto 2.2em auto; text-align: left; box-shadow: 0 6px 28px #2a2b4860;
+      padding: 2.2em 1.5em 1.8em 1.5em; position: relative;
+      opacity: 0; transform:scale(.97) translateY(40px); transition:all 0.8s cubic-bezier(.73,.24,0,1.01);
+    }
+    .intro-card.visible { opacity: 1; transform:scale(1) translateY(0);}
+    .intro-card .subtitle {
+      font-size: 1.19rem; color: var(--accent);
+      font-weight: 700; margin-top:0em; margin-bottom:.38em;
+    }
+    .intro-card .bio {
+      font-size:1.07rem; color:var(--subtext); max-width:440px; margin:1.0em 0 .4em 0; letter-spacing:.01em;
+    }
+    .section-title {
+      font-size: 2rem; font-weight: 700; margin: 2rem 0 .3em 0;
+      letter-spacing: .01em; text-align: center;
+      color: var(--violet); text-shadow: 0 2px 8px #231f3670;
+      opacity: 0; transform: translateY(30px); transition:all 0.8s cubic-bezier(.73,.24,0,1.01);
+    }
+    .section-title.visible { opacity:1; transform:translateY(0);}
+    .section-subtitle {
+      color: var(--subtext); text-align: center; font-size: 1.12rem;
+      margin-bottom: 2em; font-weight: 500;
+      opacity: 0; transform: translateY(30px); transition:all 0.9s cubic-bezier(.73,.24,0,1.01);
+    }
+    .section-subtitle.visible { opacity:1; transform:translateY(0);}
+    .flex-grid {display: flex; flex-wrap: wrap; gap: 2em; justify-content: center;}
+    .card {
+      flex: 1 1 350px; max-width: 410px; box-sizing: border-box;
+      background: var(--card-bg); border-radius: 14px; border: 1.5px solid var(--border);
+      box-shadow: 0 6px 18px #23214a60; padding: 2em 2em 1.2em 2em; margin-bottom:2em;
+      display: flex; flex-direction: column; min-width: 230px;
+      transition: box-shadow .15s, transform .13s;
+      position: relative; overflow: hidden;
+      opacity:0; transform:translateY(40px) scale(.97); transition:all 0.54s cubic-bezier(.75,.18,.17,1.1);
+    }
+    .card.visible {opacity:1; transform:translateY(0) scale(1);}
+    .card:hover {
+      box-shadow:
+        0 2px 22px 0 var(--accent),
+        0 0px 16px 2px var(--violet),
+        0 1px 6px #43c6ac;
+      transform: translateY(-7px) scale(1.017);
+      z-index: 2;
+    }
+    .card-title {
+      font-size: 1.21rem; color: var(--accent); margin-bottom:.35em;
+      display: flex; align-items: center; gap: 0.5em;
+    }
+    .card-title i {color: var(--violet);}
+    .card-subtitle { color: var(--highlight); font-size:.99rem; margin-bottom:.7em;}
+    .skill-list, .edulist, .contact-list, .proj-tags {
+      margin:0; padding:0; list-style: none;
+    }
+    .skill-list li, .edulist li, .contact-list li, .proj-tags li {
+      margin-bottom: .78em; font-size:1.04rem; color: var(--subtext);
+      display: flex; align-items: center;
+    }
+    .skill-list li i, .contact-list li i {margin-right:.7em; color:var(--contact-icon);}
+    .proj-tags {display: flex; flex-wrap: wrap; gap: .7em;}
+    .proj-tag {
+      background: #384a5e; color: var(--accent); border-radius: 12px;
+      padding: .22em 1em; font-size:.94rem; font-weight:500; margin-bottom:.4em;
+    }
+    .project-img {width: 100%; border-radius: 8px; margin-bottom:.85em; object-fit:cover; max-height:220px;}
+    .project-box {background: var(--mid-bg); border-radius: 13px; margin-bottom:2em; padding:1.4em 1em;}
+    .collapsible-header {
+      cursor: pointer;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      font-weight: bold;
+      color: var(--deep-accent);
+      font-size: 1.06em;
+      margin-bottom: .46em;
+      padding-bottom: .19em;
+      border-bottom: 1.5px solid #3741874c;
+    }
+    .collapsible-header i {transition: transform .3s;}
+    .collapsible-header.active i {transform: rotate(90deg);}
+    .collapsible-content { max-height: 0; overflow: hidden; transition: max-height .5s, padding .2s;}
+    .collapsible-content.open {padding-top:.8em;max-height:750px;}
+    .ppt-embed, .assignment-embed, .video-embed {
+      width:100%; border-radius:10px; background: #161933; border:none; margin-bottom:.5em;
+      min-height:110px;
+    }
+    .ppt-embed {height:320px;}
+    .assignment-embed {height:320px;}
+    .video-embed {height:315px;}
+    .assignment-link-btn {
+      display: inline-block; margin: 0.8em 0;
+      padding: .6em 2.2em; font-size:1.12rem; font-weight:600;
+      border-radius: 33px; border:none; background: var(--accent); color:#23214a;
+      box-shadow:0 2px 15px #7f53ff33; text-decoration: none; transition:background .2s;
+    }
+    .assignment-link-btn:hover {background: var(--violet); color:#fff;}
+    @media (max-width:900px) {
+      .flex-grid {flex-direction: column; gap: 1em;}
+      .card {max-width: 100%; min-width: 0;}
+      .main-wrapper {padding: 0.5rem;}
+      .header-flex {flex-direction: column; gap:0;}
+      .intro-card {text-align:center;padding:1.3em 1em 1.05em 1em;}
+      .profile-pic {margin-bottom: 1em;}
+    }
+    @media (max-width:600px) {
+      .section-title {font-size: 1.25rem;}
+      .intro-card .subtitle {font-size: 1rem;}
+      .intro-card{padding:1em .14em;}
+      .card {padding:1em .65em;}
+      .main-wrapper {padding: .09rem;}
+      .ppt-embed, .assignment-embed, .video-embed {height:155px;}
+      .profile-pic {width: 80px; height:80px;}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="#about" class="nav-link active">About</a>
+    <a href="#skills" class="nav-link">Skills</a>
+    <a href="#education" class="nav-link">Education</a>
+    <a href="#projects" class="nav-link">Projects</a>
+    <a href="#presentation" class="nav-link">PPT</a>
+    <a href="#intro-video" class="nav-link">Introduction Video</a>
+    <a href="#assignment" class="nav-link">Assignment</a>
+    <a href="#learnings" class="nav-link">Top 50 Learnings</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </nav>
+  <div class="main-wrapper">
+    <!-- Header with image and intro -->
+    <div class="header-flex" id="about">
+      <img src="image.jpg" alt="Krish Rana Profile Photo" class="profile-pic">
+      <div class="intro-card" style="margin:0;">
+        <div class="subtitle">
+          Hi, I'm Krish Rana, a BTech student from Graphic Era Hill University, Dehradun.
+        </div>
+        <div class="bio">
+          Passionate about coding and visualizing complex tech concepts for real-world use. Specialized in C, C++ and Python. I believe in continuous learning, clean code, and helping others understand how systems work.
+        </div>
+      </div>
+    </div>
+    <!-- Skills Section -->
+    <div class="section-title" id="skills">My Skills</div>
+    <div class="section-subtitle">Constantly learning and improving my technical abilities</div>
+    <div class="flex-grid">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-code"></i>Programming Languages</div>
+        <ul class="skill-list">
+          <li><i class="fa fa-terminal"></i>C</li>
+          <li><i class="fa fa-terminal"></i>C++</li>
+          <li><i class="fab fa-python"></i>Python</li>
+          <li><i class="fa fa-database"></i>SQL</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-tools"></i>Technologies & Tools</div>
+        <ul class="skill-list">
+          <li><i class="fab fa-html5"></i>HTML, CSS, JavaScript</li>
+          <li><i class="fab fa-git-alt"></i>Git & Version Control</li>
+          <li><i class="fa fa-linux"></i>Linux/Unix</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-brain"></i>Core Concepts</div>
+        <ul class="skill-list">
+          <li><i class="fas fa-diagram-project"></i>Data Structures</li>
+          <li><i class="fas fa-code-branch"></i>Algorithms</li>
+          <li><i class="fas fa-database"></i>Database Management</li>
+          <li><i class="fas fa-gears"></i>Software Engineering</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-rocket"></i>Areas of Interest</div>
+        <ul class="skill-list">
+          <li><i class="fas fa-robot"></i>Artificial Intelligence</li>
+          <li><i class="fas fa-shield-alt"></i>Cybersecurity</li>
+          <li><i class="fas fa-globe"></i>Web Development</li>
+          <li><i class="fas fa-hdd"></i>Operating Systems</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Education Section -->
+    <div class="section-title" id="education">Education</div>
+    <div class="flex-grid">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-graduation-cap"></i> BTech Computer Science & Engineering</div>
+        <div class="card-subtitle">Graphic Era Hill University, Dehradun</div>
+        <div>Currently pursuing (3rd year)</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-school"></i> High School</div>
+        <div class="card-subtitle">Shri Guru Ram Rai, Patel Nagar, Dehradun</div>
+        <div>Completed</div>
+      </div>
+    </div>
+    <!-- Projects Section -->
+    <div class="section-title" id="projects">Featured Projects</div>
+    <div class="section-subtitle">Showcasing my technical skills through innovative solutions</div>
+    <div class="flex-grid">
+      <div class="project-box card">
+        <img class="project-img" src="https://www.simplilearn.com/ice9/free_resources_article_thumb/C%2B%2B_Game_Example6.PNG" alt="Tic Tac Toe Screenshot">
+        <div class="card-title"><i class="fas fa-gamepad"></i> Classic Tic Tac Toe (C Language)</div>
+        <div>A fully playable terminal game demonstrating logic, user interaction, win/tie handling, and array use.</div>
+        <ul class="proj-tags">
+          <li class="proj-tag">C</li>
+          <li class="proj-tag">Arrays</li>
+          <li class="proj-tag">Logic</li>
+        </ul>
+        <div style="color:#43c6ac; margin-top:.5em;">Learnings: Improved my logical problem-solving, strengthened skills in loops and conditionals, and learned project structuring in C.</div>
+      </div>
+      <div class="project-box card">
+        <img class="project-img" src="https://drive.google.com/uc?export=view&id=1Q0e-mUIudF9UuYWn23XLBmEB1cNW0aRq" alt="Task Scheduler Simulation UI">
+        <div class="card-title"><i class="fas fa-tasks"></i> Task Scheduler Visualization (Ongoing)</div>
+        <div>Web demonstration of how CPUs use scheduling algorithms like FCFS/SJF/Round Robin to handle processes.</div>
+        <ul class="proj-tags">
+          <li class="proj-tag">JS</li>
+          <li class="proj-tag">Frontend</li>
+          <li class="proj-tag">OS Algorithms</li>
+        </ul>
+        <div style="color:#b484ff; margin-top:.5em;">Learnings: Understood scheduling logic, learned interactive frontend/backend demo building, and deepened my knowledge of OS process management.</div>
+      </div>
+    </div>
+    <!-- Presentation Section -->
+    <div class="section-title" id="presentation">Presentation (PPT)</div>
+    <div class="project-box card" style="align-items:center;">
+      <!-- Your PPT must be set to "Anyone with the link can view" in Google Drive -->
+      <iframe class="ppt-embed"
+        src="https://drive.google.com/file/d/1zccCXqnpzhrWC0VvFAKiI5IZJx0ETzC7/preview"
+        allow="autoplay"></iframe>
+      <div style="margin-top:1em; color:#bdbde6; font-size:.97em;">Use the toolbar to flip through, zoom, or go fullscreen.</div>
+    </div>
+    <!-- Introduction Video Section -->
+    <div class="section-title" id="intro-video">Introduction Video</div>
+    <div class="project-box card" style="align-items:center;">
+      <!-- Replace the src with your uploaded YouTube or video link -->
+      <iframe class="video-embed"
+        src="https://www.youtube.com/embed/your_video_id_here"
+        title="Introduction Video" allowfullscreen></iframe>
+      <div style="margin-top:1em; color:#bdbde6; font-size:.97em;"></div>
+    </div>
+    <!-- Assignment PDF Section -->
+    <div class="section-title" id="assignment">Assignment PDF</div>
+    <div class="project-box card" style="align-items:center;">
+      <!-- Replace the src with your uploaded PDF link -->
+      <iframe class="assignment-embed"
+        src="https://drive.google.com/file/d/your_assignment_id_here/preview"
+        title="Assignment PDF"></iframe>
+      <div style="margin-top:1em; color:#bdbde6; font-size:.97em;">
+      </div>
+    </div>
+    <!-- Top 50 Learnings Section (end, before contact) -->
+    <div class="section-title" id="learnings">Top 50 Learnings</div>
+    <div class="section-subtitle">Key takeaways from the Employability & Skill Enhancement Lab</div>
+    <div class="flex-grid" style="flex-wrap:wrap; gap:1.5em;">
+      <div class="card collapsible">
+        <div class="collapsible-header">
+          <span><i class="fas fa-comments"></i> A. Communication Skills</span>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="collapsible-content">
+          <ul class="skill-list">
+            <li>Communicate clearly and briefly to avoid confusion.</li>
+            <li>Building confidence by maintaining steady eye contact.</li>
+            <li>Listening is as crucial as expressing your thoughts.</li>
+            <li>Body language and tone amplify your spoken message.</li>
+            <li>Group discussions build speaking skills and flexibility.</li>
+            <li>Reducing fillers (“like”, “um”) brings fluency.</li>
+            <li>Practicing public talks eliminates stage fright.</li>
+            <li>Accurate pronunciation and clear enunciation matter.</li>
+            <li>Written work should be organized and error-free.</li>
+            <li>Confident gestures and posture speak volumes without words.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card collapsible">
+        <div class="collapsible-header">
+          <span><i class="fas fa-users"></i> B. Teamwork & Collaboration</span>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="collapsible-content">
+          <ul class="skill-list">
+            <li>Teamwork enhances patience and adaptability.</li>
+            <li>Lead by inspiring and supporting, not commanding.</li>
+            <li>Diverse viewpoints foster original solutions.</li>
+            <li>Resolving disagreements keeps teams productive.</li>
+            <li>Delegating work increases group efficiency.</li>
+            <li>Encouragement moves the team forward faster.</li>
+            <li>Give feedback kindly and constructively.</li>
+            <li>Adjust to different working habits and personalities.</li>
+            <li>Share duties for a fair workload.</li>
+            <li>Solving problems together forges strong teams.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card collapsible">
+        <div class="collapsible-header">
+          <span><i class="fas fa-search"></i> C. Critical Thinking</span>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="collapsible-content">
+          <ul class="skill-list">
+            <li>Analyze situations before acting for better results.</li>
+            <li>Brainstorming stirs up creative solutions.</li>
+            <li>Find root causes before proposing fixes.</li>
+            <li>Base your arguments on data, not guesswork.</li>
+            <li>Weigh the pros and cons before deciding.</li>
+            <li>Stay curious—keep asking questions!</li>
+            <li>Practice with real-life scenarios for adaptability.</li>
+            <li>Manage your time to boost productivity.</li>
+            <li>Keep calm in pressure situations to think clearly.</li>
+            <li>Set clear objectives and track your progress.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card collapsible">
+        <div class="collapsible-header">
+          <span><i class="fas fa-desktop"></i> D. Technical & Digital Skills</span>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="collapsible-content">
+          <ul class="skill-list">
+            <li>Create engaging presentations in PowerPoint.</li>
+            <li>Craft polished resumes using MS Word or Canva.</li>
+            <li>Master basic Excel tools for organizing data.</li>
+            <li>Send professional emails with proper etiquette.</li>
+            <li>Use the internet to research efficiently and ethically.</li>
+            <li>Collaborate online with tools like Google Meet or Teams.</li>
+            <li>Keep your online accounts and devices secure.</li>
+            <li>Host virtual meetings with professionalism.</li>
+            <li>Build your professional network on LinkedIn.</li>
+            <li>Be aware of your digital “footprint” and online presence.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card collapsible">
+        <div class="collapsible-header">
+          <span><i class="fas fa-user-tie"></i> E. Etiquette & Personality</span>
+          <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="collapsible-content">
+          <ul class="skill-list">
+            <li>Dress for the occasion and the workplace culture.</li>
+            <li>Being on time shows commitment and respect.</li>
+            <li>Confidence—without arrogance—draws opportunities your way.</li>
+            <li>Maintaining discipline helps achieve consistency.</li>
+            <li>Positive energy is attractive and employable.</li>
+            <li>Manage workplace emotions and relationships wisely.</li>
+            <li>Continuously update and hone your skills.</li>
+            <li>Your ethics and conduct reflect your personal brand.</li>
+            <li>Welcome criticism as a tool for growth.</li>
+            <li>Adopt a growth mindset for a lasting career journey.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Contact Section -->
+    <div class="section-title" id="contact">Contact Information</div>
+    <div class="section-subtitle">Let's connect and discuss opportunities in technology and innovation</div>
+    <div class="card contact-card" style="max-width:530px; margin:0 auto;">
+      <ul class="contact-list">
+        <li><i class="fas fa-envelope"></i><span class="item-label">Email</span>
+          <span class="item-value"><a href="mailto:krishrana796@gmail.com">krishrana796@gmail.com</a></span></li>
+        <li><i class="fab fa-linkedin"></i><span class="item-label">LinkedIn</span>
+          <span class="item-value"><a href="https://in.linkedin.com/in/krish-rana-2a0958341" target="_blank">Connect on LinkedIn</a></span></li>
+        <li><i class="fas fa-map-marker-alt"></i><span class="item-label">Location</span>
+          <span class="item-value">Dehradun, India</span></li>
+      </ul>
+      <div style="margin-top:1.2em; color:#bdbde6; font-size:.97em;">I'm always interested in new opportunities, collaborations, or just connecting with fellow tech enthusiasts!</div>
+    </div>
+  </div>
+  <script>
+    // Navbar active highlight on scroll
+    const navLinks=document.querySelectorAll('nav a.nav-link');
+    window.addEventListener('scroll',()=>{
+      let fromTop=window.scrollY+81;
+      navLinks.forEach(link=>{
+        let section=document.querySelector(link.getAttribute('href'));
+        if(section&&section.offsetTop<=fromTop&&section.offsetTop+section.offsetHeight>fromTop){
+          navLinks.forEach(l=>l.classList.remove('active'));link.classList.add('active');
+        }
+      });
+    });
+    // Animate sections/cards in
+    function revealOnScroll() {
+      document.querySelectorAll('.section-title, .section-subtitle, .intro-card, .card').forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+        if (top < viewHeight - 50) el.classList.add('visible');
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('DOMContentLoaded', revealOnScroll);
+
+    // Collapsible for learnings
+    document.querySelectorAll('.collapsible .collapsible-header').forEach(header => {
+      header.addEventListener('click', function() {
+        const content = this.nextElementSibling;
+        const alreadyOpen = content.classList.contains('open');
+        document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('open'));
+        document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('active'));
+        if (!alreadyOpen) {
+          content.classList.add('open');
+          this.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
