@@ -1,468 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Krish Rana | Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <style>
+    /* =========================
+       G3 Palette & Theme Vars
+       Dark theme DEFAULT (body has .dark-mode initially)
+       ========================= */
+    :root{
+      /* Light palette */
+      --light-bg: #f7f5f0;
+      --primary-lav: #cab8ff;
+      --violet-shade: #b79aff;
+      --deep-lav: #a77bff;
+      --glow: #c7a8ff;
+      --glow-strong: #dbbfff;
+      --accent-dark-shade: #7d5cff;
+      --text-light: #333333;
+      --subtext-light: #555555;
+
+      /* Dark palette */
+      --dark-bg: #0c0e16;
+      --card-dark: #141726;
+      --lav-accent-dark: #9f84ff;
+      --glow-dark: #7b5cff;
+      --glow-hover-dark: #a88fff;
+      --text-dark: #d6d6d6;
+      --subtext-dark: #aaaaaa;
+
+      /* Shared sizing */
+      --max-width: 1200px;
+      --radius: 18px;
+      --nav-h: 64px;
+      --ease: 0.35s;
+    }
+
+    /* Default: DARK theme variables (user asked dark default) */
     :root {
-      --primary-bg: #181c2c;
-      --mid-bg: #231f36;
-      --gradient: linear-gradient(120deg, #1e244d 0%, #23214a 93%);
-      --accent: #43c6ac;
-      --deep-accent: #00bcd4;
-      --violet: #7f53ff;
-      --card-bg: #23294a;
-      --border: #39354b;
-      --highlight: #e6d3f7;
-      --text: #f3f3f3;
-      --subtext: #bdbde6;
-      --contact-icon: #7f53ff;
-      --learn-bg: #1a2238;
+      --bg: var(--dark-bg);
+      --mid-bg: linear-gradient(180deg, rgba(20,23,38,0.6), rgba(12,14,22,0.6));
+      --card-bg: var(--card-dark);
+      --accent: var(--lav-accent-dark);
+      --violet: var(--glow-dark);
+      --glow-color: var(--glow-dark);
+      --glow-strong-color: var(--glow-hover-dark);
+      --text: var(--text-dark);
+      --subtext: var(--subtext-dark);
+      --border: rgba(255,255,255,0.05);
+      --nav-bg: linear-gradient(180deg, rgba(26,30,44,0.6), rgba(12,14,22,0.65));
     }
-    html, body {
-      min-height: 100vh;
-      background: var(--primary-bg);
-      background-image: var(--gradient);
-      color: var(--text);
-      font-family: 'Montserrat', sans-serif;
-      margin: 0; padding: 0;
-      scroll-behavior: smooth;
+
+    /* Light theme overrides when .light-mode present on body */
+    body.light-mode{
+      --bg: var(--light-bg);
+      --mid-bg: linear-gradient(180deg, rgba(202,184,255,0.08), rgba(202,184,255,0.04));
+      --card-bg: #ffffff;
+      --accent: var(--primary-lav);
+      --violet: var(--violet-shade);
+      --glow-color: var(--glow);
+      --glow-strong-color: var(--glow-strong);
+      --text: var(--text-light);
+      --subtext: var(--subtext-light);
+      --border: rgba(125,92,255,0.12);
+      --nav-bg: linear-gradient(180deg, rgba(202,184,255,0.06), rgba(202,184,255,0.03));
     }
-    a { color: var(--accent); text-decoration: none; }
-    nav {
-      background: var(--learn-bg); color:var(--text);
-      display: flex; justify-content: center; align-items: center; gap: 1.35em;
-      box-shadow: 0 2px 9px #23214a55; padding: 1rem .2em .7em .5em;
-      font-size:1rem; position: sticky; top: 0; z-index: 20;
+
+    /* Base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Montserrat', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      background-image: var(--mid-bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background var(--ease), color var(--ease);
+      scroll-behavior:smooth;
+      cursor: none; /* custom cursor will be used */
     }
-    nav a {
-      color: var(--accent); font-weight: 600; border-radius: 9px;
-      border-bottom: 2.5px solid transparent; padding: .41em 1em;
-      transition: color .19s,background .20s,border .18s;
+    main{max-width:var(--max-width);margin:0 auto;padding:24px 18px 80px}
+
+    /* Noise overlay for dark mode (only visible in dark) */
+    body::after{
+      content:"";
+      position:fixed;inset:0;pointer-events:none;z-index:9998;
+      background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.006) 0, transparent 2%), radial-gradient(circle at 60% 80%, rgba(255,255,255,0.006) 0, transparent 2%);
+      opacity:0.8;
+      mix-blend-mode:overlay;
+      display:block;
     }
-    nav a.active, nav a:hover { background: var(--violet); color: #fff;
-      border-bottom: 2.5px solid var(--accent);}
-    .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1rem 1rem 1rem;}
-    .header-flex {
-      display: flex; align-items: center; gap: 2.1em;
-      justify-content: center; max-width:650px;margin:2rem auto 0 auto;
+    body.light-mode::after{opacity:0;}
+
+    /* Custom cursor */
+    .cursor {position:fixed;pointer-events:none;z-index:99999;width:22px;height:22px;border-radius:50%;transform:translate(-50%,-50%);transition:transform .08s linear, background .2s linear, width .12s ease,height .12s ease;border:2px solid rgba(255,255,255,0.06);mix-blend-mode:screen}
+    .cursor.cursor-active{width:46px;height:46px;border-width:2px;background:linear-gradient(90deg,var(--glow-color),var(--glow-strong-color));opacity:0.12;transform:translate(-50%,-50%) scale(1.02)}
+
+    /* Navbar */
+    nav{position:sticky;top:0;z-index:9997;display:flex;align-items:center;justify-content:center;gap:12px;height:var(--nav-h);background:var(--nav-bg);padding:10px;border-bottom:1px solid var(--border);backdrop-filter:blur(8px) saturate(160%);transition:box-shadow var(--ease)}
+    nav a{color:var(--accent);text-decoration:none;font-weight:700;padding:8px 12px;border-radius:10px;display:inline-flex;align-items:center;gap:8px;transition:all .22s ease}
+    nav a i{color:var(--violet)}
+    nav a:hover, nav a.active{box-shadow:0 10px 50px -28px var(--glow-strong-color);transform:translateY(-4px);color:#fff;border-bottom:3px solid var(--accent)}
+
+    /* Mode toggle */
+    .mode-switch{position:fixed;right:18px;top:12px;z-index:9999;display:flex;align-items:center;gap:10px;background:var(--card-bg);padding:8px 12px;border-radius:999px;border:1px solid var(--border);box-shadow:0 8px 40px -24px var(--glow-color);cursor:pointer}
+    .mode-switch .icon{color:var(--violet);font-size:1.05rem}
+    .mode-switch span{font-weight:700;color:var(--text)}
+
+    /* Section spacing and title */
+    .section-divider{width:100%;height:56px;margin:28px 0;pointer-events:none;opacity:0.9}
+    .section-title{font-size:2.4rem;font-weight:800;text-align:center;color:var(--accent);margin:28px 0 6px;transition:transform .6s ease,opacity .6s ease}
+    .section-subtitle{color:var(--subtext);text-align:center;margin-bottom:22px;font-weight:600}
+
+    .flex-grid{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;padding:0 8px 28px}
+
+    /* Intro / profile */
+    .header-flex{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:20px}
+    .profile-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+    .profile-pulse{position:absolute;inset:0;border-radius:50%;filter:blur(28px);opacity:0.12;pointer-events:none;background:radial-gradient(circle, var(--glow-color), transparent 35%) ;animation:pulse 3.6s ease-in-out infinite}
+    @keyframes pulse{0%{transform:scale(.94)}50%{transform:scale(1.06)}100%{transform:scale(.94)}}
+    .profile-pic{width:180px;height:180px;border-radius:50%;object-fit:cover;border:6px solid rgba(255,255,255,0.03);box-shadow:0 20px 70px -20px var(--glow-color);transition:transform .45s cubic-bezier(.2,.9,.3,1),box-shadow .45s}
+    .profile-pic:hover{transform:scale(1.12);box-shadow:0 32px 110px -30px var(--glow-strong-color)}
+
+    .intro-card{background:linear-gradient(120deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));padding:26px 22px;border-radius:18px;max-width:720px;box-shadow:0 18px 90px -40px rgba(0,0,0,0.55);border-left:6px solid var(--accent);transition:transform .45s,box-shadow .45s}
+    .subtitle.typewriter{font-size:1.32rem;font-weight:800;color:var(--accent);display:block;overflow:hidden;white-space:nowrap;border-right:.12em solid transparent;letter-spacing:.02em}
+    .bio{color:var(--subtext);font-size:1.02rem;line-height:1.6;margin-top:8px}
+
+    /* Cards */
+    .card{background:var(--card-bg);border-radius:var(--radius);padding:22px;border:1px solid var(--border);min-width:260px;max-width:460px;box-shadow:0 10px 40px -18px rgba(0,0,0,0.6);transition:transform .35s cubic-bezier(.2,.9,.3,1),box-shadow .35s,border-color .35s;position:relative;overflow:hidden}
+    /* animated gradient border via pseudo-element */
+    .card::before{content:"";position:absolute;inset:-2px;background:linear-gradient(90deg,#c7a8ff,#dbbfff,#a77bff);z-index:-1;border-radius:calc(var(--radius) + 2px);filter:blur(16px);opacity:0.28;transition:opacity .6s;mix-blend-mode:screen;animation:rotateHue 8s linear infinite}
+    @keyframes rotateHue{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
+
+    .card:hover{transform:perspective(1000px) translateY(-10px) rotateX(2deg) rotateY(-4deg) scale(1.02);box-shadow:0 40px 120px -40px rgba(151,112,255,0.12)}
+    .card.visible{opacity:1;transform:none}
+
+    .card-title{font-size:1.14rem;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:8px}
+    .card-title i{color:var(--violet)}
+    .card-subtitle{color:var(--subtext);font-weight:700;margin-bottom:12px}
+
+    ul.skill-list, ul.edulist, ul.proj-tags{list-style:none;padding:0;margin:8px 0 0}
+    ul.skill-list li{margin-bottom:10px;color:var(--subtext);font-weight:700;display:flex;align-items:center;gap:10px}
+    ul.skill-list li i{color:var(--accent);min-width:22px;text-align:center}
+
+    .proj-tag{background:linear-gradient(90deg, rgba(125,92,255,0.08), rgba(167,123,255,0.04));color:var(--accent);padding:6px 12px;border-radius:999px;font-weight:700;font-size:.95rem}
+
+    /* Projects specifics */
+    .project-box{max-width:740px;padding:18px;margin-bottom:28px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);box-shadow:0 14px 80px -40px rgba(0,0,0,0.55);transition:transform .36s,box-shadow .36s}
+    .project-img{width:100%;height:280px;object-fit:cover;border-radius:12px;transition:transform .5s cubic-bezier(.2,.9,.3,1),box-shadow .35s,filter .25s;will-change:transform}
+    .project-img:hover{transform:perspective(1000px) rotateX(3deg) rotateY(-3deg) scale(1.03);box-shadow:0 28px 110px -40px rgba(167,123,255,0.12);filter:brightness(1.02) saturate(1.1)}
+    .project-learning-title{font-weight:800;margin-top:12px;color:var(--accent);font-size:0.98rem}
+    .project-learning-text{color:var(--subtext);margin-top:8px;font-weight:700}
+
+    /* Embeds larger & uniform */
+    .embed-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px;border-radius:16px;background:var(--card-bg);border:1px solid var(--border);box-shadow:0 14px 80px -40px rgba(0,0,0,0.6);max-width:960px;margin:0 auto}
+    .embed-frame{width:92%;height:420px;border-radius:12px;border:none;background:#111;box-shadow:0 20px 120px -60px rgba(151,112,255,0.12);transition:box-shadow .45s,transform .35s}
+    .embed-frame:hover{box-shadow:0 34px 160px -60px rgba(219,191,255,0.12);transform:translateY(-6px) scale(1.01)}
+    @media(max-width:900px){ .embed-frame{height:320px;width:96%} }
+    @media(max-width:480px){ .embed-frame{height:200px} }
+
+    /* Swiper styling */
+    .swiper{padding:12px 6px 44px;max-width:1100px;margin:0 auto}
+    .swiper-slide{background:var(--card-bg);border-radius:14px;padding:18px;box-shadow:0 6px 40px -14px rgba(151,112,255,0.06);color:var(--text);max-width:420px;margin:10px auto;border:1px solid var(--border);transition:transform .35s,box-shadow .35s}
+    .swiper-slide strong{display:block;font-size:1.18rem;color:var(--accent);margin-bottom:10px;font-weight:900}
+    .swiper-button-next, .swiper-button-prev{color:var(--accent);background:transparent;border-radius:8px;padding:6px 10px;box-shadow:0 8px 30px -20px rgba(151,112,255,0.06)}
+    .swiper-button-next:hover, .swiper-button-prev:hover{color:#fff;box-shadow:0 12px 46px -20px rgba(219,191,255,0.08)}
+    .swiper-pagination-bullet{background:var(--accent);opacity:0.6}
+    .swiper-pagination-bullet-active{background:var(--violet);opacity:1}
+
+    /* Contact */
+    .contact-card{max-width:620px;margin:0 auto;padding:22px;border-radius:16px;background:var(--card-bg);border:1px solid var(--border);box-shadow:0 14px 70px -40px rgba(0,0,0,0.6)}
+    .contact-list{list-style:none;padding:0;margin:0}
+    .contact-list li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,0.03);color:var(--text);font-weight:700}
+    .contact-list li i{color:var(--accent);min-width:28px;text-align:center}
+
+    /* Section reveal default hidden */
+    section{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.2,.9,.3,1);will-change:transform,opacity}
+    section.visible{opacity:1;transform:translateY(0)}
+
+    /* Accessibility focus */
+    a:focus,button:focus,.card:focus{outline:3px solid rgba(167,123,255,0.12);outline-offset:4px}
+
+    /* Responsive tweaks */
+    @media(max-width:900px){
+      .project-img{height:200px}
+      .card{max-width:100%}
+      .profile-pic{width:140px;height:140px}
+      .intro-card{max-width:94%}
+      nav{gap:8px;padding:8px}
+      .section-title{font-size:1.6rem}
     }
-    .profile-pic {
-      width: 115px; height: 115px; border-radius: 50%; object-fit: cover;
-      border: 3px solid var(--accent); background: #24294b;
-      box-shadow: 0 4px 20px #16e3c82e; flex-shrink: 0;
-      transition: box-shadow .2s;
+    @media(max-width:480px){
+      .profile-pic{width:110px;height:110px}
+      .intro-card{padding:16px}
+      .embed-frame{height:200px}
     }
-    .profile-pic:hover { box-shadow:0 0 32px 2px var(--violet);}
-    .intro-card {
-      background: linear-gradient(100deg, #161933 65%, #23214a 100%);
-      color: var(--text); border-radius: 18px; max-width: 650px;
-      margin: 1.2em auto 2.2em auto; text-align: left; box-shadow: 0 6px 28px #2a2b4860;
-      padding: 2.2em 1.5em 1.8em 1.5em; position: relative;
-      opacity: 0; transform:scale(.97) translateY(40px); transition:all 0.8s cubic-bezier(.73,.24,0,1.01);
-    }
-    .intro-card.visible { opacity: 1; transform:scale(1) translateY(0);}
-    .intro-card .subtitle {
-      font-size: 1.19rem; color: var(--accent);
-      font-weight: 700; margin-top:0em; margin-bottom:.38em;
-    }
-    .intro-card .bio {
-      font-size:1.07rem; color:var(--subtext); max-width:440px; margin:1.0em 0 .4em 0; letter-spacing:.01em;
-    }
-    .section-title {
-      font-size: 2rem; font-weight: 700; margin: 2rem 0 .3em 0;
-      letter-spacing: .01em; text-align: center;
-      color: var(--violet); text-shadow: 0 2px 8px #231f3670;
-      opacity: 0; transform: translateY(30px); transition:all 0.8s cubic-bezier(.73,.24,0,1.01);
-    }
-    .section-title.visible { opacity:1; transform:translateY(0);}
-    .section-subtitle {
-      color: var(--subtext); text-align: center; font-size: 1.12rem;
-      margin-bottom: 2em; font-weight: 500;
-      opacity: 0; transform: translateY(30px); transition:all 0.9s cubic-bezier(.73,.24,0,1.01);
-    }
-    .section-subtitle.visible { opacity:1; transform:translateY(0);}
-    .flex-grid {display: flex; flex-wrap: wrap; gap: 2em; justify-content: center;}
-    .card {
-      flex: 1 1 350px; max-width: 410px; box-sizing: border-box;
-      background: var(--card-bg); border-radius: 14px; border: 1.5px solid var(--border);
-      box-shadow: 0 6px 18px #23214a60; padding: 2em 2em 1.2em 2em; margin-bottom:2em;
-      display: flex; flex-direction: column; min-width: 230px;
-      transition: box-shadow .15s, transform .13s;
-      position: relative; overflow: hidden;
-      opacity:0; transform:translateY(40px) scale(.97); transition:all 0.54s cubic-bezier(.75,.18,.17,1.1);
-    }
-    .card.visible {opacity:1; transform:translateY(0) scale(1);}
-    .card:hover {
-      box-shadow:
-        0 2px 22px 0 var(--accent),
-        0 0px 16px 2px var(--violet),
-        0 1px 6px #43c6ac;
-      transform: translateY(-7px) scale(1.017);
-      z-index: 2;
-    }
-    .card-title {
-      font-size: 1.21rem; color: var(--accent); margin-bottom:.35em;
-      display: flex; align-items: center; gap: 0.5em;
-    }
-    .card-title i {color: var(--violet);}
-    .card-subtitle { color: var(--highlight); font-size:.99rem; margin-bottom:.7em;}
-    .skill-list, .edulist, .contact-list, .proj-tags {
-      margin:0; padding:0; list-style: none;
-    }
-    .skill-list li, .edulist li, .contact-list li, .proj-tags li {
-      margin-bottom: .78em; font-size:1.04rem; color: var(--subtext);
-      display: flex; align-items: center;
-    }
-    .skill-list li i, .contact-list li i {margin-right:.7em; color:var(--contact-icon);}
-    .proj-tags {display: flex; flex-wrap: wrap; gap: .7em;}
-    .proj-tag {
-      background: #384a5e; color: var(--accent); border-radius: 12px;
-      padding: .22em 1em; font-size:.94rem; font-weight:500; margin-bottom:.4em;
-    }
-    .project-img {width: 100%; border-radius: 8px; margin-bottom:.85em; object-fit:cover; max-height:220px;}
-    .project-box {background: var(--mid-bg); border-radius: 13px; margin-bottom:2em; padding:1.4em 1em;}
-    .collapsible-header {
-      cursor: pointer;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      font-weight: bold;
-      color: var(--deep-accent);
-      font-size: 1.06em;
-      margin-bottom: .46em;
-      padding-bottom: .19em;
-      border-bottom: 1.5px solid #3741874c;
-    }
-    .collapsible-header i {transition: transform .3s;}
-    .collapsible-header.active i {transform: rotate(90deg);}
-    .collapsible-content { max-height: 0; overflow: hidden; transition: max-height .5s, padding .2s;}
-    .collapsible-content.open {padding-top:.8em;max-height:750px;}
-    .ppt-embed, .assignment-embed, .video-embed {
-      width:100%; border-radius:10px; background: #161933; border:none; margin-bottom:.5em;
-      min-height:110px;
-    }
-    .ppt-embed {height:320px;}
-    .assignment-embed {height:320px;}
-    .video-embed {height:315px;}
-    .assignment-link-btn {
-      display: inline-block; margin: 0.8em 0;
-      padding: .6em 2.2em; font-size:1.12rem; font-weight:600;
-      border-radius: 33px; border:none; background: var(--accent); color:#23214a;
-      box-shadow:0 2px 15px #7f53ff33; text-decoration: none; transition:background .2s;
-    }
-    .assignment-link-btn:hover {background: var(--violet); color:#fff;}
-    @media (max-width:900px) {
-      .flex-grid {flex-direction: column; gap: 1em;}
-      .card {max-width: 100%; min-width: 0;}
-      .main-wrapper {padding: 0.5rem;}
-      .header-flex {flex-direction: column; gap:0;}
-      .intro-card {text-align:center;padding:1.3em 1em 1.05em 1em;}
-      .profile-pic {margin-bottom: 1em;}
-    }
-    @media (max-width:600px) {
-      .section-title {font-size: 1.25rem;}
-      .intro-card .subtitle {font-size: 1rem;}
-      .intro-card{padding:1em .14em;}
-      .card {padding:1em .65em;}
-      .main-wrapper {padding: .09rem;}
-      .ppt-embed, .assignment-embed, .video-embed {height:155px;}
-      .profile-pic {width: 80px; height:80px;}
-    }
+    /* ======== Custom Cursor ======== */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: rgba(203,178,255,0.8);
+  box-shadow: 0 0 20px #a88fff;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.8;
+  z-index: 1000;
+}
+.cursor.hovered {
+  transform: translate(-50%, -50%) scale(1.6);
+  opacity: 1;
+}
+
+/* ======== Particle Background ======== */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  overflow: hidden;
+}
+.particles span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #9f84ff;
+  opacity: 0.3;
+  border-radius: 50%;
+  animation: floatParticle 10s linear infinite;
+}
+@keyframes floatParticle {
+  0% { transform: translateY(100vh) scale(0.5); }
+  100% { transform: translateY(-10vh) scale(1.2); }
+}
+
+/* ======== Noise Overlay ======== */
+.noise {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAtEBf+Jhy0kAAAAASUVORK5CYII=');
+  opacity: 0.05;
+  z-index: -1;
+}
+
   </style>
 </head>
-<body>
-  <nav>
-    <a href="#about" class="nav-link active">About</a>
-    <a href="#skills" class="nav-link">Skills</a>
-    <a href="#education" class="nav-link">Education</a>
-    <a href="#projects" class="nav-link">Projects</a>
-    <a href="#presentation" class="nav-link">PPT</a>
-    <a href="#intro-video" class="nav-link">Introduction Video</a>
-    <a href="#assignment" class="nav-link">Assignment</a>
-    <a href="#learnings" class="nav-link">Top 50 Learnings</a>
-    <a href="#contact" class="nav-link">Contact</a>
-  </nav>
-  <div class="main-wrapper">
-    <!-- Header with image and intro -->
-    <div class="header-flex" id="about">
-      <img src="image.jpg" alt="Krish Rana Profile Photo" class="profile-pic">
-      <div class="intro-card" style="margin:0;">
-        <div class="subtitle">
-          Hi, I'm Krish Rana, a BTech student from Graphic Era Hill University, Dehradun.
-        </div>
-        <div class="bio">
-          Passionate about coding and visualizing complex tech concepts for real-world use. Specialized in C, C++ and Python. I believe in continuous learning, clean code, and helping others understand how systems work.
-        </div>
-      </div>
-    </div>
-    <!-- Skills Section -->
-    <div class="section-title" id="skills">My Skills</div>
-    <div class="section-subtitle">Constantly learning and improving my technical abilities</div>
-    <div class="flex-grid">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-code"></i>Programming Languages</div>
-        <ul class="skill-list">
-          <li><i class="fa fa-terminal"></i>C</li>
-          <li><i class="fa fa-terminal"></i>C++</li>
-          <li><i class="fab fa-python"></i>Python</li>
-          <li><i class="fa fa-database"></i>SQL</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fas fa-tools"></i>Technologies & Tools</div>
-        <ul class="skill-list">
-          <li><i class="fab fa-html5"></i>HTML, CSS, JavaScript</li>
-          <li><i class="fab fa-git-alt"></i>Git & Version Control</li>
-          <li><i class="fa fa-linux"></i>Linux/Unix</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fas fa-brain"></i>Core Concepts</div>
-        <ul class="skill-list">
-          <li><i class="fas fa-diagram-project"></i>Data Structures</li>
-          <li><i class="fas fa-code-branch"></i>Algorithms</li>
-          <li><i class="fas fa-database"></i>Database Management</li>
-          <li><i class="fas fa-gears"></i>Software Engineering</li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fas fa-rocket"></i>Areas of Interest</div>
-        <ul class="skill-list">
-          <li><i class="fas fa-robot"></i>Artificial Intelligence</li>
-          <li><i class="fas fa-shield-alt"></i>Cybersecurity</li>
-          <li><i class="fas fa-globe"></i>Web Development</li>
-          <li><i class="fas fa-hdd"></i>Operating Systems</li>
-        </ul>
-      </div>
-    </div>
-    <!-- Education Section -->
-    <div class="section-title" id="education">Education</div>
-    <div class="flex-grid">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-graduation-cap"></i> BTech Computer Science & Engineering</div>
-        <div class="card-subtitle">Graphic Era Hill University, Dehradun</div>
-        <div>Currently pursuing (3rd year)</div>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fas fa-school"></i> High School</div>
-        <div class="card-subtitle">Shri Guru Ram Rai, Patel Nagar, Dehradun</div>
-        <div>Completed</div>
-      </div>
-    </div>
-    <!-- Projects Section -->
-    <div class="section-title" id="projects">Featured Projects</div>
-    <div class="section-subtitle">Showcasing my technical skills through innovative solutions</div>
-    <div class="flex-grid">
-      <div class="project-box card">
-        <img class="project-img" src="https://www.simplilearn.com/ice9/free_resources_article_thumb/C%2B%2B_Game_Example6.PNG" alt="Tic Tac Toe Screenshot">
-        <div class="card-title"><i class="fas fa-gamepad"></i> Classic Tic Tac Toe (C Language)</div>
-        <div>A fully playable terminal game demonstrating logic, user interaction, win/tie handling, and array use.</div>
-        <ul class="proj-tags">
-          <li class="proj-tag">C</li>
-          <li class="proj-tag">Arrays</li>
-          <li class="proj-tag">Logic</li>
-        </ul>
-        <div style="color:#43c6ac; margin-top:.5em;">Learnings: Improved my logical problem-solving, strengthened skills in loops and conditionals, and learned project structuring in C.</div>
-      </div>
-      <div class="project-box card">
-        <img class="project-img" src="https://drive.google.com/uc?export=view&id=1Q0e-mUIudF9UuYWn23XLBmEB1cNW0aRq" alt="Task Scheduler Simulation UI">
-        <div class="card-title"><i class="fas fa-tasks"></i> Task Scheduler Visualization (Ongoing)</div>
-        <div>Web demonstration of how CPUs use scheduling algorithms like FCFS/SJF/Round Robin to handle processes.</div>
-        <ul class="proj-tags">
-          <li class="proj-tag">JS</li>
-          <li class="proj-tag">Frontend</li>
-          <li class="proj-tag">OS Algorithms</li>
-        </ul>
-        <div style="color:#b484ff; margin-top:.5em;">Learnings: Understood scheduling logic, learned interactive frontend/backend demo building, and deepened my knowledge of OS process management.</div>
-      </div>
-    </div>
-    <!-- Presentation Section -->
-    <div class="section-title" id="presentation">Presentation (PPT)</div>
-    <div class="project-box card" style="align-items:center;">
-      <!-- Your PPT must be set to "Anyone with the link can view" in Google Drive -->
-      <iframe class="ppt-embed"
-        src="https://drive.google.com/file/d/1zccCXqnpzhrWC0VvFAKiI5IZJx0ETzC7/preview"
-        allow="autoplay"></iframe>
-      <div style="margin-top:1em; color:#bdbde6; font-size:.97em;">Use the toolbar to flip through, zoom, or go fullscreen.</div>
-    </div>
-    <!-- Introduction Video Section -->
-    <div class="section-title" id="intro-video">Introduction Video</div>
-    <div class="project-box card" style="align-items:center;">
-      <!-- Replace the src with your uploaded YouTube or video link -->
-      <iframe class="video-embed"
-        src="https://www.youtube.com/embed/your_video_id_here"
-        title="Introduction Video" allowfullscreen></iframe>
-      <div style="margin-top:1em; color:#bdbde6; font-size:.97em;"></div>
-    </div>
-    <!-- Assignment PDF Section -->
-    <div class="section-title" id="assignment">Assignment PDF</div>
-    <div class="project-box card" style="align-items:center;">
-      <!-- Replace the src with your uploaded PDF link -->
-      <iframe class="assignment-embed"
-        src="https://drive.google.com/file/d/your_assignment_id_here/preview"
-        title="Assignment PDF"></iframe>
-      <div style="margin-top:1em; color:#bdbde6; font-size:.97em;">
-      </div>
-    </div>
-    <!-- Top 50 Learnings Section (end, before contact) -->
-    <div class="section-title" id="learnings">Top 50 Learnings</div>
-    <div class="section-subtitle">Key takeaways from the Employability & Skill Enhancement Lab</div>
-    <div class="flex-grid" style="flex-wrap:wrap; gap:1.5em;">
-      <div class="card collapsible">
-        <div class="collapsible-header">
-          <span><i class="fas fa-comments"></i> A. Communication Skills</span>
-          <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="collapsible-content">
-          <ul class="skill-list">
-            <li>Communicate clearly and briefly to avoid confusion.</li>
-            <li>Building confidence by maintaining steady eye contact.</li>
-            <li>Listening is as crucial as expressing your thoughts.</li>
-            <li>Body language and tone amplify your spoken message.</li>
-            <li>Group discussions build speaking skills and flexibility.</li>
-            <li>Reducing fillers (“like”, “um”) brings fluency.</li>
-            <li>Practicing public talks eliminates stage fright.</li>
-            <li>Accurate pronunciation and clear enunciation matter.</li>
-            <li>Written work should be organized and error-free.</li>
-            <li>Confident gestures and posture speak volumes without words.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card collapsible">
-        <div class="collapsible-header">
-          <span><i class="fas fa-users"></i> B. Teamwork & Collaboration</span>
-          <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="collapsible-content">
-          <ul class="skill-list">
-            <li>Teamwork enhances patience and adaptability.</li>
-            <li>Lead by inspiring and supporting, not commanding.</li>
-            <li>Diverse viewpoints foster original solutions.</li>
-            <li>Resolving disagreements keeps teams productive.</li>
-            <li>Delegating work increases group efficiency.</li>
-            <li>Encouragement moves the team forward faster.</li>
-            <li>Give feedback kindly and constructively.</li>
-            <li>Adjust to different working habits and personalities.</li>
-            <li>Share duties for a fair workload.</li>
-            <li>Solving problems together forges strong teams.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card collapsible">
-        <div class="collapsible-header">
-          <span><i class="fas fa-search"></i> C. Critical Thinking</span>
-          <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="collapsible-content">
-          <ul class="skill-list">
-            <li>Analyze situations before acting for better results.</li>
-            <li>Brainstorming stirs up creative solutions.</li>
-            <li>Find root causes before proposing fixes.</li>
-            <li>Base your arguments on data, not guesswork.</li>
-            <li>Weigh the pros and cons before deciding.</li>
-            <li>Stay curious—keep asking questions!</li>
-            <li>Practice with real-life scenarios for adaptability.</li>
-            <li>Manage your time to boost productivity.</li>
-            <li>Keep calm in pressure situations to think clearly.</li>
-            <li>Set clear objectives and track your progress.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card collapsible">
-        <div class="collapsible-header">
-          <span><i class="fas fa-desktop"></i> D. Technical & Digital Skills</span>
-          <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="collapsible-content">
-          <ul class="skill-list">
-            <li>Create engaging presentations in PowerPoint.</li>
-            <li>Craft polished resumes using MS Word or Canva.</li>
-            <li>Master basic Excel tools for organizing data.</li>
-            <li>Send professional emails with proper etiquette.</li>
-            <li>Use the internet to research efficiently and ethically.</li>
-            <li>Collaborate online with tools like Google Meet or Teams.</li>
-            <li>Keep your online accounts and devices secure.</li>
-            <li>Host virtual meetings with professionalism.</li>
-            <li>Build your professional network on LinkedIn.</li>
-            <li>Be aware of your digital “footprint” and online presence.</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card collapsible">
-        <div class="collapsible-header">
-          <span><i class="fas fa-user-tie"></i> E. Etiquette & Personality</span>
-          <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="collapsible-content">
-          <ul class="skill-list">
-            <li>Dress for the occasion and the workplace culture.</li>
-            <li>Being on time shows commitment and respect.</li>
-            <li>Confidence—without arrogance—draws opportunities your way.</li>
-            <li>Maintaining discipline helps achieve consistency.</li>
-            <li>Positive energy is attractive and employable.</li>
-            <li>Manage workplace emotions and relationships wisely.</li>
-            <li>Continuously update and hone your skills.</li>
-            <li>Your ethics and conduct reflect your personal brand.</li>
-            <li>Welcome criticism as a tool for growth.</li>
-            <li>Adopt a growth mindset for a lasting career journey.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <!-- Contact Section -->
-    <div class="section-title" id="contact">Contact Information</div>
-    <div class="section-subtitle">Let's connect and discuss opportunities in technology and innovation</div>
-    <div class="card contact-card" style="max-width:530px; margin:0 auto;">
-      <ul class="contact-list">
-        <li><i class="fas fa-envelope"></i><span class="item-label">Email</span>
-          <span class="item-value"><a href="mailto:krishrana796@gmail.com">krishrana796@gmail.com</a></span></li>
-        <li><i class="fab fa-linkedin"></i><span class="item-label">LinkedIn</span>
-          <span class="item-value"><a href="https://in.linkedin.com/in/krish-rana-2a0958341" target="_blank">Connect on LinkedIn</a></span></li>
-        <li><i class="fas fa-map-marker-alt"></i><span class="item-label">Location</span>
-          <span class="item-value">Dehradun, India</span></li>
-      </ul>
-      <div style="margin-top:1.2em; color:#bdbde6; font-size:.97em;">I'm always interested in new opportunities, collaborations, or just connecting with fellow tech enthusiasts!</div>
-    </div>
+<body class="dark-mode">
+  <!-- Custom cursor element -->
+   <!-- ✨ Custom Effects Elements -->
+  <div class="particles"></div>
+  <div class="noise"></div>
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Mode switch -->
+  <div class="mode-switch" id="modeSwitch" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle theme">
+    <i class="icon fa fa-moon" id="modeIcon" aria-hidden="true"></i>
+    <span id="modeLabel">Dark</span>
   </div>
+
+  <!-- Navigation -->
+  <nav aria-label="Main navigation">
+    <a href="#about" class="nav-link active"><i class="fas fa-user-circle"></i>About</a>
+    <a href="#skills" class="nav-link"><i class="fas fa-laptop-code"></i>Skills</a>
+    <a href="#education" class="nav-link"><i class="fas fa-graduation-cap"></i>Education</a>
+    <a href="#projects" class="nav-link"><i class="fas fa-folder-open"></i>Projects</a>
+    <a href="#presentation" class="nav-link"><i class="fas fa-file-powerpoint"></i>PPT</a>
+    <a href="#intro-video" class="nav-link"><i class="fas fa-play-circle"></i>Video</a>
+    <a href="#assignment" class="nav-link"><i class="fas fa-file-alt"></i>Assignment</a>
+    <a href="#learnings" class="nav-link"><i class="fas fa-lightbulb"></i>Learnings</a>
+    <a href="#contact" class="nav-link"><i class="fas fa-envelope"></i>Contact</a>
+  </nav>
+
+  <main id="page" role="main">
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 Q600,60 1200,10 L1200,56 L0,56Z"></path></svg>
+
+    <!-- ABOUT -->
+    <section id="about" class="section-about" aria-label="About section">
+      <div class="header-flex">
+        <div class="profile-wrap" aria-hidden="false">
+          <div class="profile-pulse" aria-hidden="true"></div>
+          <img class="profile-pic" src="https://media.licdn.com/dms/image/v2/D5603AQH6b0mYUUif7A/profile-displayphoto-shrink_400_400/B56ZPtgtfMHQAg-/0/1734856603291?e=1764201600&v=beta&t=v0m1XaV48Nevz8wMOUbwW95AvXWvA8jKjaCQEj7CbrE" alt="Krish Rana Profile Photo" loading="lazy" width="180" height="180">
+        </div>
+
+        <div class="intro-card" role="region" aria-live="polite" aria-label="Introduction">
+          <div id="profile-desc" class="subtitle typewriter">Hi, I’m Krish Rana — I am a btech 2nd year student</div>
+          <div class="bio">Passionate about coding and visualizing complex tech concepts for real-world use. Specialized in C, C++ and Python. I believe in continuous learning.</div>
+        </div>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,20 Q600,50 1200,5 L1200,56 L0,56Z" /></svg>
+
+    <!-- SKILLS -->
+    <section id="skills" aria-label="Skills section">
+      <h2 class="section-title">My Skills</h2>
+      <p class="section-subtitle">Constantly learning and improving my technical abilities</p>
+      <div class="flex-grid">
+        <article class="card" tabindex="0" aria-label="Programming Languages">
+          <h3 class="card-title"><i class="fas fa-code" aria-hidden="true"></i>Programming Languages</h3>
+          <ul class="skill-list">
+            <li><i class="fa fa-terminal" aria-hidden="true"></i>C</li>
+            <li><i class="fa fa-terminal" aria-hidden="true"></i>C++</li>
+            <li><i class="fab fa-python" aria-hidden="true"></i>Python</li>
+            <li><i class="fa fa-database" aria-hidden="true"></i>SQL</li>
+          </ul>
+        </article>
+
+        <article class="card" tabindex="0" aria-label="Technologies and Tools">
+          <h3 class="card-title"><i class="fas fa-tools" aria-hidden="true"></i>Technologies & Tools</h3>
+          <ul class="skill-list">
+            <li><i class="fab fa-html5" aria-hidden="true"></i>HTML</li>
+            <li><i class="fab fa-git-alt" aria-hidden="true"></i>Git</li>
+            <li><i class="fa fa-linux" aria-hidden="true"></i>Linux</li>
+            <li><i class="fas fa-cloud" aria-hidden="true"></i>AWS & Cloud Computing</li>
+          </ul>
+        </article>
+
+        <article class="card" tabindex="0" aria-label="Core Concepts">
+          <h3 class="card-title"><i class="fas fa-brain" aria-hidden="true"></i>Core Concepts</h3>
+          <ul class="skill-list">
+            <li><i class="fas fa-diagram-project" aria-hidden="true"></i>Data Structures</li>
+            <li><i class="fas fa-code-branch" aria-hidden="true"></i>Algorithms</li>
+            <li><i class="fas fa-database" aria-hidden="true"></i>Database Management</li>
+          </ul>
+        </article>
+
+        <article class="card" tabindex="0" aria-label="Areas of Interest">
+          <h3 class="card-title"><i class="fas fa-rocket" aria-hidden="true"></i>Areas of Interest</h3>
+          <ul class="skill-list">
+            <li><i class="fas fa-robot" aria-hidden="true"></i>Artificial Intelligence</li>
+            <li><i class="fas fa-shield-alt" aria-hidden="true"></i>Cybersecurity</li>
+            <li><i class="fas fa-globe" aria-hidden="true"></i>Web Development</li>
+            <li><i class="fas fa-hdd" aria-hidden="true"></i>Operating Systems</li>
+            <li><i class="fas fa-brain" aria-hidden="true"></i>Machine Learning</li>
+            <li><i class="fas fa-cloud-sun" aria-hidden="true"></i>Cloud Computing</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 Q600,60 1200,10 L1200,56 L0,56Z" /></svg>
+
+    <!-- EDUCATION -->
+    <section id="education" aria-label="Education">
+      <h2 class="section-title">Education</h2>
+      <div class="flex-grid">
+        <article class="card" tabindex="0">
+          <h3 class="card-title"><i class="fas fa-graduation-cap" aria-hidden="true"></i> BTech Computer Science & Engineering</h3>
+          <p class="card-subtitle">Graphic Era Hill University, Dehradun</p>
+          <p>Currently pursuing (3rd year)</p>
+          <ul class="edulist">
+            <li>Core Curriculum: Data Structures, Algorithms,python</li>
+            <li>Relevant Projects: Task Scheduler Simulation, Classic Tic-Tac-Toe Game</li>
+          </ul>
+        </article>
+
+        <article class="card" tabindex="0">
+          <h3 class="card-title"><i class="fas fa-school" aria-hidden="true"></i> High School</h3>
+          <p class="card-subtitle">Shri Guru Ram Rai, Patel Nagar, Dehradun</p>
+          <p>Completed with 81% aggregate</p>
+          <ul class="edulist">
+            <li>Specialized in Science with Computer Science</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,20 Q600,50 1200,5 L1200,56 L0,56Z" /></svg>
+
+    <!-- PROJECTS -->
+    <section id="projects" aria-label="Featured Projects">
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-subtitle">Showcasing my technical skills through innovative solutions</p>
+      <div class="flex-grid">
+        <article class="project-box card" tabindex="0" aria-label="Classic Tic Tac Toe Project">
+          <img class="project-img" src="https://www.simplilearn.com/ice9/free_resources_article_thumb/C%2B%2B_Game_Example6.PNG" alt="Classic Tic Tac Toe game terminal screenshot">
+          <h3 class="card-title"><i class="fas fa-gamepad" aria-hidden="true"></i> Classic Tic Tac Toe (C Language)</h3>
+          <p>A terminal-based Tic Tac Toe game demonstrating arrays, logic, and user interaction.</p>
+          <ul class="proj-tags" aria-label="Project tags">
+            <li class="proj-tag">C</li>
+            <li class="proj-tag">Arrays</li>
+            <li class="proj-tag">Logic</li>
+            <li class="proj-tag">Game Development</li>
+          </ul>
+          <p class="project-learning-title">Learnings:</p>
+          <p class="project-learning-text">Logical problem solving, loops &amp; conditionals, project structuring in pure C, file handling basics, and user I/O management.</p>
+        </article>
+
+        <article class="project-box card" tabindex="0" aria-label="Task Scheduler Visualization Project">
+          <img class="project-img" src="https://drive.google.com/uc?export=view&id=1Q0e-mUIudF9UuYWn23XLBmEB1cNW0aRq" alt="Task Scheduler Visualization UI">
+          <h3 class="card-title"><i class="fas fa-tasks" aria-hidden="true"></i> Task Scheduler Visualization (Ongoing)</h3>
+          <p>Web demo illustrating CPU scheduling algorithms like FCFS, SJF, Round Robin to handle multiple processes.</p>
+          <ul class="proj-tags" aria-label="Project tags">
+            <li class="proj-tag">JavaScript</li>
+            <li class="proj-tag">Frontend</li>
+            <li class="proj-tag">Operating Systems</li>
+            <li class="proj-tag">Algorithms</li>
+          </ul>
+          <p class="project-learning-title">Learnings:</p>
+          <p class="project-learning-text">Scheduling logic, building interactive frontend/backend, visualization techniques, and performance profiling.</p>
+        </article>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 Q600,58 1200,10 L1200,56 L0,56Z" /></svg>
+
+    <!-- PRESENTATION (PPT) -->
+    <section id="presentation" aria-label="Presentation Section">
+      <h2 class="section-title">Presentation (PPT)</h2>
+      <div class="embed-card" role="region" aria-label="Project presentation">
+        <iframe class="embed-frame ppt-embed" src="https://drive.google.com/file/d/1zccCXqnpzhrWC0VvFAKiI5IZJx0ETzC7/preview" title="Project Presentation PPT" loading="lazy" allow="autoplay"></iframe>
+        <p class="embed-note" style="color:var(--subtext);">Use the embedded viewer toolbar to flip through slides or go fullscreen.</p>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,15 Q600,45 1200,10 L1200,56 L0,56Z" /></svg>
+
+    <!-- INTRO VIDEO -->
+    <section id="intro-video" aria-label="Introduction Video">
+      <h2 class="section-title">Introduction Video</h2>
+      <div class="embed-card" role="region" aria-label="Introduction video">
+        <iframe class="embed-frame video-embed" src="https://www.youtube.com/embed/your_video_id_here" title="Introduction Video" loading="lazy" allowfullscreen></iframe>
+        <p class="embed-note" style="color:var(--subtext);">Introduction video</p>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,25 Q600,50 1200,15 L1200,56 L0,56Z" /></svg>
+
+    <!-- ASSIGNMENT -->
+    <section id="assignment" aria-label="Assignment PDF">
+      <h2 class="section-title">Assignment PDF</h2>
+      <div class="embed-card" role="region" aria-label="Assignment document">
+        <iframe class="embed-frame assignment-embed" src="https://drive.google.com/file/d/1LtGdU3F8O96cot2Emde7RAHs_--u6bTA/preview" title="Assignment PDF" loading="lazy"></iframe>
+        <p class="embed-note" style="color:var(--subtext);">Assignment PDF</p>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,20 Q620,57 1200,15 L1200,56 L0,56Z" /></svg>
+
+    <!-- LEARNINGS SWIPER -->
+    <section id="learnings" aria-label="Top 50 Learnings">
+      <h2 class="section-title">Top 50 Learnings</h2>
+      <div class="swiper mySwiper" aria-live="polite" aria-label="Top 50 Learnings slider">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide" tabindex="0">
+            <strong>SWOC Analysis</strong>
+            <ul>
+              <li>I learnt how to analyze my own strengths, weaknesses, opportunities.</li>
+              <li>I got a clearer idea.</li>
+              <li>I identified a few areas where I need to improve and started working on them.</li>
+              <li>I learnt how to look for opportunities that can help me grow professionally.</li>
+              <li>I understood how to face and manage challenges with a positive attitude.</li>
+              <li>This unit helped me become more self-aware and confident.</li>
+              <li>I improved the way I express my thoughts while presenting my SWOC.</li>
+              <li>I developed better analytical thinking while reflecting on my personal traits.</li>
+              <li>I realized how useful SWOC analysis can be for career planning and goal setting.</li>
+              <li>Overall, I learnt a lot about myself.</li>
+            </ul>
+          </div>
+          <div class="swiper-slide" tabindex="0">
+            <strong>Self Introduction</strong>
+            <ul>
+              <li>I learnt how to introduce myself confidently and effectively.</li>
+              <li>I understood what points to include and how to organize them in a short introduction.</li>
+              <li>I became more comfortable speaking about myself in front of others.</li>
+              <li>I learnt how to make my introduction sound natural yet professional.</li>
+              <li>I improved my body language, posture, and eye contact while speaking.</li>
+              <li>I got better at managing my tone and clarity of speech.</li>
+              <li>I practiced different types of introductions for formal and informal situations.</li>
+              <li>I got helpful feedback that made my introduction smoother and more confident.</li>
+              <li>I learnt to handle nervousness while speaking in front of a group.</li>
+              <li>This unit really helped me feel more confident in interviews and presentations.</li>
+            </ul>
+          </div>
+          <div class="swiper-slide" tabindex="0">
+            <strong>Presentation Skills</strong>
+            <ul>
+              <li>I learnt how to plan and deliver a clear and engaging presentation.</li>
+              <li>I understood the importance of knowing my audience before presenting.</li>
+              <li>I became more aware of my body language and voice while speaking.</li>
+              <li>I learnt how to organize my content properly with an introduction, main points, and conclusion.</li>
+              <li>I practiced using slides and visuals to make my presentation more effective.</li>
+              <li>I improved my confidence and overcame stage fear.</li>
+              <li>I learnt how to manage my time and keep the audience interested.</li>
+              <li>I got better at explaining topics in a simple and structured way.</li>
+              <li>I received feedback that helped me refine my presentation style.</li>
+              <li>Overall, I became much more confident and expressive as a presenter.</li>
+            </ul>
+          </div>
+          <div class="swiper-slide" tabindex="0">
+            <strong>Public Speaking</strong>
+            <ul>
+              <li>I learnt the importance of public speaking and how it builds confidence.</li>
+              <li>I practiced speaking on different topics in front of the class.</li>
+              <li>I overcame a lot of my stage fear and nervousness.</li>
+              <li>I learnt how to express my ideas clearly and confidently.</li>
+              <li>I worked on my tone, clarity, and overall delivery.</li>
+              <li>I got better at organizing my thoughts before speaking.</li>
+              <li>Activities like JAM and extempore really improved my fluency.</li>
+              <li>I learnt how to maintain eye contact and connect with the audience.</li>
+              <li>I became more spontaneous and comfortable while speaking on the spot.</li>
+              <li>This unit helped me become a more confident and natural speaker.</li>
+            </ul>
+          </div>
+          <div class="swiper-slide" tabindex="0">
+            <strong>Art of Conversation</strong>
+            <ul>
+              <li>I learnt how to start and maintain meaningful conversations with others.</li>
+              <li>I understood the importance of good listening while communicating.</li>
+              <li>I became more polite and confident while talking to people.</li>
+              <li>I learnt proper communication etiquette for different situations.</li>
+              <li>I improved my tone, expressions, and body language during conversations.</li>
+              <li>I practiced real-life scenarios that made me more comfortable interacting with new people.</li>
+              <li>I learnt how to keep conversations balanced and engaging.</li>
+              <li>I became more aware of cultural and social manners while speaking.</li>
+              <li>I got better at handling both formal and casual talks.</li>
+              <li>Overall, this unit improved my communication and helped me interact more naturally with others.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="swiper-pagination" aria-label="Slider Pagination"></div>
+        <div class="swiper-button-prev" aria-label="Previous Slide"></div>
+        <div class="swiper-button-next" aria-label="Next Slide"></div>
+      </div>
+    </section>
+
+    <svg class="section-divider" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 Q600,60 1200,10 L1200,56 L0,56Z"></path></svg>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-label="Contact Information">
+      <h2 class="section-title">Contact Information</h2>
+      <p class="section-subtitle">Let's connect and discuss opportunities in technology and innovation</p>
+      <article class="contact-card card" tabindex="0">
+        <ul class="contact-list">
+          <li><i class="fas fa-envelope" aria-hidden="true"></i><span class="item-label">Email</span><span class="item-value"><a href="mailto:krishrana796@gmail.com">krishrana796@gmail.com</a></span></li>
+          <li><i class="fab fa-linkedin" aria-hidden="true"></i><span class="item-label">LinkedIn</span><span class="item-value"><a href="https://in.linkedin.com/in/krish-rana-2a0958341" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a></span></li>
+          <li><i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="item-label">Location</span><span class="item-value">Dehradun, India</span></li>
+        </ul>
+        <p style="margin-top:14px;color:var(--subtext)">I'm always interested in new opportunities, collaborations, or just connecting with fellow tech enthusiasts!</p>
+      </article>
+    </section>
+  </main>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
   <script>
-    // Navbar active highlight on scroll
-    const navLinks=document.querySelectorAll('nav a.nav-link');
-    window.addEventListener('scroll',()=>{
-      let fromTop=window.scrollY+81;
-      navLinks.forEach(link=>{
-        let section=document.querySelector(link.getAttribute('href'));
-        if(section&&section.offsetTop<=fromTop&&section.offsetTop+section.offsetHeight>fromTop){
-          navLinks.forEach(l=>l.classList.remove('active'));link.classList.add('active');
-        }
-      });
+    /* ======== Particles ======== */
+const particlesContainer = document.createElement('div');
+particlesContainer.classList.add('particles');
+document.body.prepend(particlesContainer);
+for (let i = 0; i < 40; i++) {
+  const span = document.createElement('span');
+  span.style.left = Math.random() * 100 + 'vw';
+  span.style.animationDuration = (5 + Math.random() * 10) + 's';
+  span.style.opacity = Math.random();
+  particlesContainer.appendChild(span);
+}
+    /* ---------- Custom cursor ---------- */
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
     });
-    // Animate sections/cards in
-    function revealOnScroll() {
-      document.querySelectorAll('.section-title, .section-subtitle, .intro-card, .card').forEach(el => {
-        const top = el.getBoundingClientRect().top;
-        const viewHeight = window.innerHeight || document.documentElement.clientHeight;
-        if (top < viewHeight - 50) el.classList.add('visible');
+    // enlarge cursor on interactive elements
+    const interactive = 'a, button, .card, .project-img, .mode-switch, nav a';
+    document.querySelectorAll(interactive).forEach(el=>{
+      el.addEventListener('mouseenter', ()=> cursor.classList.add('cursor-active'));
+      el.addEventListener('mouseleave', ()=> cursor.classList.remove('cursor-active'));
+    });
+
+    /* ---------- Floating particles behind profile photo ---------- */
+    (function spawnParticles(){
+      const wrap = document.querySelector('.profile-wrap');
+      if(!wrap) return;
+      const count = 14;
+      for(let i=0;i<count;i++){
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = (Math.random()*28)+6;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = (Math.random()*80)+'%';
+        p.style.top = (Math.random()*80)+'%';
+        p.style.background = 'radial-gradient(circle, rgba(199,168,255,0.9), rgba(219,191,255,0.28))';
+        p.style.opacity = (Math.random()*0.6)+0.15;
+        p.style.position = 'absolute';
+        p.style.borderRadius = '50%';
+        p.style.filter = 'blur(10px)';
+        p.style.pointerEvents = 'none';
+        p.style.animation = 'floatParticles ' + (8+Math.random()*8) + 's linear infinite';
+        wrap.appendChild(p);
+      }
+    })();
+
+    /* ---------- Parallax scroll for slight background movement ---------- */
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      document.body.style.backgroundPosition = 'center ' + (y * -0.05) + 'px';
+    });
+
+    /* ---------- Typewriter effect re-trigger (ensures full width) ---------- */
+    (function typeWriter(){
+      const el = document.querySelector('.typewriter');
+      if(!el) return;
+      const txt = el.textContent.trim();
+      el.textContent = '';
+      el.style.borderRight = '.12em solid rgba(255,255,255,0.12)';
+      let i=0;
+      const speed=28;
+      function step(){
+        if(i<=txt.length){ el.textContent = txt.slice(0,i); i++; setTimeout(step,speed); }
+        else el.style.borderRight = 'none';
+      }
+      step();
+    })();
+
+    /* ---------- Reveal on scroll (keep original animations) ---------- */
+    function revealOnScroll(){
+      document.querySelectorAll('section, .card, .project-box').forEach(el=>{
+        const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        if(rect.top < vh - 80) el.classList.add('visible');
       });
     }
     window.addEventListener('scroll', revealOnScroll);
-    window.addEventListener('DOMContentLoaded', revealOnScroll);
+    window.addEventListener('DOMContentLoaded', ()=>{ revealOnScroll(); setTimeout(revealOnScroll,200); });
 
-    // Collapsible for learnings
-    document.querySelectorAll('.collapsible .collapsible-header').forEach(header => {
-      header.addEventListener('click', function() {
-        const content = this.nextElementSibling;
-        const alreadyOpen = content.classList.contains('open');
-        document.querySelectorAll('.collapsible-content').forEach(c => c.classList.remove('open'));
-        document.querySelectorAll('.collapsible-header').forEach(h => h.classList.remove('active'));
-        if (!alreadyOpen) {
-          content.classList.add('open');
-          this.classList.add('active');
+    /* ---------- Swiper setup (Learnings) ---------- */
+    const swiper = new Swiper('.mySwiper', {
+      centeredSlides: true,
+      slidesPerView: 1,
+      spaceBetween: 24,
+      loop: false,
+      grabCursor: true,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      breakpoints: { 640: { slidesPerView:2 }, 980: { slidesPerView:3 } }
+    });
+
+    /* ---------- Navbar active highlight ---------- */
+    const navLinks = document.querySelectorAll('nav a.nav-link');
+    function updateActiveNav(){
+      let fromTop = window.scrollY + (window.innerHeight * 0.12);
+      navLinks.forEach(link=>{
+        const section = document.querySelector(link.getAttribute('href'));
+        if(section && section.offsetTop <= fromTop && section.offsetTop + section.offsetHeight > fromTop){
+          navLinks.forEach(l=>l.classList.remove('active'));
+          link.classList.add('active');
         }
       });
-    });
+    }
+    window.addEventListener('scroll', updateActiveNav);
+    window.addEventListener('resize', updateActiveNav);
+    window.addEventListener('DOMContentLoaded', updateActiveNav);
+
+    /* ---------- Theme toggle (dark default) ---------- */
+    const modeSwitch = document.getElementById('modeSwitch');
+    const modeIcon = document.getElementById('modeIcon');
+    const modeLabel = document.getElementById('modeLabel');
+    // body starts with class 'dark-mode' in markup
+    function setLightMode(enabled){
+      if(enabled){
+        document.body.classList.add('light-mode');
+        document.body.classList.remove('dark-mode');
+        modeIcon.className = 'icon fa fa-sun';
+        modeLabel.textContent = 'Light';
+        modeSwitch.setAttribute('aria-pressed','false');
+      } else {
+        document.body.classList.add('dark-mode');
+        document.body.classList.remove('light-mode');
+        modeIcon.className = 'icon fa fa-moon';
+        modeLabel.textContent = 'Dark';
+        modeSwitch.setAttribute('aria-pressed','true');
+      }
+    }
+    // init dark (already set) but ensure vars
+    setLightMode(false);
+    modeSwitch.addEventListener('click', ()=> setLightMode(document.body.classList.contains('dark-mode')) );
+    modeSwitch.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); setLightMode(document.body.classList.contains('dark-mode')); } });
+
+    /* ---------- Make iframes focusable & accessible ---------- */
+    document.querySelectorAll('iframe').forEach(f=>{ f.setAttribute('tabindex','0'); });
+
+    /* ---------- Improve touch behavior small fix ---------- */
+    let touchStart = 0;
+    window.addEventListener('touchstart', e => { touchStart = e.changedTouches[0].clientY; });
+
   </script>
+
+
 </body>
 </html>
